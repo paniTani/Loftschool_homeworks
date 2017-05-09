@@ -91,23 +91,4 @@ describe('ДЗ 1 - функции', () => {
         });
     });
 
-    describe('bindFunction', () => {
-        function fn(a, b) {
-            return a + b;
-        }
-
-        it('должна возвращать функцию', () => {
-            let result = bindFunction(fn);
-
-            assert.typeOf(result, 'function');
-        });
-
-        it('должна привязывать аргументы возвращаемой функции', () => {
-            let valueA = random('number');
-            let valueB = random('number');
-            let result = bindFunction(fn, valueA, valueB);
-
-            assert.equal(result(), valueA + valueB);
-        });
-    });
 });
