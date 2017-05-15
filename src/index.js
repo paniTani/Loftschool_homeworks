@@ -5,43 +5,77 @@
  Напишите аналог встроенного метода forEach для работы с массивами(Должна передавать: элемент, индекс, массив)
  */
 
-let arr1 = [1, 'button', true, 523, 'str'];
+let arr1 = [1,2,3,4,5];
 
 function forEach(array, fn){
-    return fn(array);
+    for(let i=0; i<array.length; i++){
+        fn(array[i], i, array);
+    }
 }
 
-let propertySearch = function(arr) {
+function propertySearch(item, ind, arr){
+    console.log('arr['+ind+']:' + arr[ind] + ';' + ' ' + 'ind:' + ind + ';' + '  ' + 'arr: ' + arr);
+}
 
-    for(let i=0; i < arr.length; i++){
-
-        console.log('arr['+i+']:' + arr[i] + ';' + ' ' + 'i:' + i + ';' + '  ' + 'arr: ' + arr);
-
-    }
-};
 forEach(arr1, propertySearch);
 
 /*
  Задача 2:
  Напишите аналог встроенного метода map для работы с массивами
  */
+
 let basicArr = [7,8,9];
+let res;
+
+function map(arr, propertySearch) {
+    let newArr = [];
+    for(let i=0; i < arr.length; i++){
+        propertySearch(arr[i], i, arr);
+        newArr.push(res);
+    }
+    return newArr;
+}
+function propertyFunc(item, ind, array) {
+    res = array[ind] * 2;
+
+}
+map(basicArr, propertyFunc);
+
+
+
+
+
+
+
+/*let basicArr = [7,8,9];
+let res;
 let newArr = [];
 
-function map(arr, properySearch) {
+function map(arr, propertySearch) {
 
-    return properySearch(arr);
+
+    for(let i=0; i < arr.length; i++){
+        propertySearch(arr[i], i, arr);
+        newArr[i] = arr[i];
+        newArr.push(res);
+
+    }
+    return newArr;
 }
 
-let propertyFunc = function(arr) {
+function propertyFunc(item, ind, array) {
+    res = array[ind] * 2;
 
-    for(let i = 0; i < arr.length; i++){
-        newArr.push(arr[i]);
-        console.log('newArr['+i+']:' + newArr[i] + ';' + ' ' + 'i:' + i + ';' + '  ' + 'newArr: ' + newArr);
-    }
-};
+}
 
-map(basicArr, propertyFunc);
+map(basicArr, propertyFunc);*/
+
+
+
+
+
+
+
 
 /*
  Задача 3:
@@ -73,7 +107,6 @@ reduce(thisArr, workingFunction, init);
  */
 
 function deleteProperty(obj, prop) {
-    debugger;
     delete obj[prop];
 }
 
@@ -135,8 +168,13 @@ getEnumProps(book);
  Задача 7:
  Функция должна перебрать все свойства объекта, преобразовать их имена в верхний регистра и вернуть в виде массива
  */
+
 function upperProps(obj) {
-    return Object.keys(obj);
+    let arr = [];
+    for (let key in obj) {
+        arr.push(key.toUpperCase());
+    }
+    return arr;
 }
 
 let human = {
@@ -147,6 +185,10 @@ let human = {
 };
 
 upperProps(human);
+
+
+
+
 
 /*
  Задача 8 *:
