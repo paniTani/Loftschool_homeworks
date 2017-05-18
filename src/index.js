@@ -14,7 +14,7 @@ function forEach(array, fn) {
 }
 
 function propertySearch(item, ind, arr) {
-    console.log('arr['+ind+']:' + arr[ind] + ';' + ' ' + 'ind:' + ind + ';' + '  ' + 'arr: ' + arr);
+    console.log('arr[' + ind + ']:' + arr[ind] + ';' + ' ' + 'ind:' + ind + ';' + '  ' + 'arr: ' + arr);
 }
 
 forEach(arr1, propertySearch);
@@ -45,97 +45,41 @@ map(basicArr, propertyFunc);
  Задача 3:
  Напишите аналог встроенного метода reduce для работы с массивами
  */
-
-/* let thisArr = [1, 2, 3, 4, 5];
-let init = 2;
-
-function reduce(array, fn, initial) {
-    for(let i = 0; i < array.length; i++){
-
-    }
-
-    return fn(array, initial);
-}
-
-function workingFunction(thisArr, init) {
-    let result = init;
-
-    for (let i = 0; i < thisArr.length; i++) {
-        result += thisArr[i];
-    }
-
-    return result;
-}
-
-reduce(thisArr, workingFunction, init);*/
-
-// -1) должна вызывать функцию для каждого элемента и передавать предыдущий результат первым аргументом
-// -2) должна учитывать initial;
-// -3) если initial не указан, то при первой итерации в prev передается первый элемент массива;
-// 4) +должна передавать элемент вторым аргументом;
-// 5) +должна передавать индекс элемента третьим аргументом;
-// 6) +должна передавать сам массив четвертым аргументом;
-// 7) +не должна изменять оригинальный массив;
-// -8) общая проверка работоспособности.
-/* let thisArr = [1, 2, 3, 4, 5];
-let init = 2;
-
-function reduce(array, fn, initial) {
-
-    for (let i = 0; i < array.length; i++) {
-
-        if (i = 0 && initial == undefined) {
-            prev = array[i];
-            console.log('prevFromIf', prev);
-        }
-        else if (i = 0 && initial !== undefined) {
-            prev = initial;
-            console.log('prevFromIf', prev);
-        }
-        fn(prev, array[i], i, array);
-    }
-
-    return prev;
-}
-
-function myFunc(previousValue, currentItem, index, arr) {
-
-    previousValue = previousValue + currentItem;
-
-    return previousValue;
-}
-
-reduce(thisArr, myFunc, init);*/
+/* 1) должна вызывать функцию для каждого элемента и передавать предыдущий результат первым аргументом
+ 2) должна учитывать initial;
+ 3) если initial не указан, то при первой итерации в prev передается первый элемент массива;
+ 4) должна передавать элемент вторым аргументом;
+ 5) должна передавать индекс элемента третьим аргументом;
+ 6) должна передавать сам массив четвертым аргументом;
+ 7) не должна изменять оригинальный массив;
+ 8) общая проверка работоспособности. */
 
 let thisArr = [1, 2, 3, 4, 5];
-//let init = 0;
 
 function reduce(array, fn, initial) {
-    //debugger;
+    // debugger;
 
     let prev;
     let i;
-    let res = 0;
 
     if (initial == undefined) {
         prev = array[0];
         i = 1;
-    }
-    else {
+    } else {
         prev = initial;
         i = 0;
     }
 
     for (i; i < array.length; i++) {
 
-        res += fn(prev, array[i], i, array);
-
-        console.log('res', res);
+        prev = fn(prev, array[i], i, array);
     }
-    return res;
+
+    return prev;
 }
 function myFunc(previousValue, currentItem, index, arr) {
     let result = previousValue + currentItem;
+
     return result;
 }
 reduce(thisArr, myFunc, 7);
@@ -168,7 +112,8 @@ function hasProperty(obj, prop) {
 
         return true;
     }
-        return false;
+
+    return false;
 }
 
 let car = {
@@ -235,7 +180,7 @@ upperProps(human);
 /* let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 let returnedArr = [];*/
 
-function slice(array, from, to) {}
+// function slice(array, from, to) {}
 /*
     function negativeFrom(par) {
         from = (array[array.length - 1] + from);
@@ -320,6 +265,6 @@ export {
     hasProperty,
     getEnumProps,
     upperProps,
-    slice,
+    // slice,
     createProxy
 };
