@@ -1,270 +1,205 @@
-/* ДЗ 3 - работа с массивами и объеектами */
+/* ДЗ 4 - работа с DOM */
 
-/*
- Задача 1:
- Напишите аналог встроенного метода forEach для работы с массивами(Должна передавать: элемент, индекс, массив)
+/** 1
+ * Функция должна создать элемент с тегом DIV, поместить в него текстовый узел и вернуть получившийся элемент
+ *
+ * @param {string} text - текст, который необходимо поместить в div
+ * @return {Element}
  */
 
-let arr1 = [1, 2, 3, 4, 5];
+function createDivWithText(text) {
 
-function forEach(array, fn) {
-    for (let i = 0; i < array.length; i++) {
-        fn(array[i], i, array);
-    }
+    let div = document.createElement('div');
+
+    div.innerText = text;
+
+    return div;
+}
+createDivWithText('text');
+
+/** 2
+ * Функция должна создать элемент с тегом A, установить значение для атрибута href и вернуть получившийся элемент
+ *
+ * @param {string} hrefValue - значение для атрибута href
+ * @return {Element}
+ */
+function createAWithHref(hrefValue) {
+    let a = document.createElement('a');
+
+    a.setAttribute('href', hrefValue);
+
+    return a;
 }
 
-function propertySearch(item, ind, arr) {
-    console.log('arr[' + ind + ']:' + arr[ind] + ';' + ' ' + 'ind:' + ind + ';' + '  ' + 'arr: ' + arr);
-}
+createAWithHref('http://google.com.ua');
 
-forEach(arr1, propertySearch);
-
-/*
- Задача 2:
- Напишите аналог встроенного метода map для работы с массивами
+/** 3
+ * Функция должна вставлять элемент what в начало элемента where
+ *
+ * @param {Element} what - что вставлять
+ * @param {Element} where - куда вставлять
  */
 
-let basicArr = [7, 8, 9];
-
-function map(arr, propertySearch) {
-    let newArr = [];
-
-    for (let i = 0; i < arr.length; i++) {
-        newArr.push(propertySearch(arr[i], i, arr));
-    }
-
-    return newArr;
-}
-function propertyFunc(item, ind, array) {
-
-    return array[ind] * 2;
-}
-map(basicArr, propertyFunc);
-
 /*
- Задача 3:
- Напишите аналог встроенного метода reduce для работы с массивами
- */
-/* 1) должна вызывать функцию для каждого элемента и передавать предыдущий результат первым аргументом
- 2) должна учитывать initial;
- 3) если initial не указан, то при первой итерации в prev передается первый элемент массива;
- 4) должна передавать элемент вторым аргументом;
- 5) должна передавать индекс элемента третьим аргументом;
- 6) должна передавать сам массив четвертым аргументом;
- 7) не должна изменять оригинальный массив;
- 8) общая проверка работоспособности. */
+let div = document.createElement('div');
+let h1 = document.createElement('h1');
 
-let thisArr = [1, 2, 3, 4, 5];
+div.innerHTML = '<p id="p1">Paragraph1</p><p id="p2">Paragraph2</p><p id="p3">Paragraph3</p>';
 
-function reduce(array, fn, initial) {
-    // debugger;
+*/
 
-    let prev;
-    let i;
 
-    if (initial == undefined) {
-        prev = array[0];
-        i = 1;
-    } else {
-        prev = initial;
-        i = 0;
-    }
+function prepend(what, where) {
 
-    for (i; i < array.length; i++) {
+    let firstEl = where.firstChild;
 
-        prev = fn(prev, array[i], i, array);
-    }
-
-    return prev;
+    where.insertBefore(what, firstEl);
 }
-function myFunc(previousValue, currentItem, index, arr) {
-    let result = previousValue + currentItem;
+//prepend(h1, firstEl);
+
+
+/*function prepend(what, where) {
+    let firstChild = where.firstChild;
+
+    where.insertBefore(what, firstChild);
+}*/
+
+
+/** 4
+ * Функция должна перебрать все дочерние элементы элемента where
+ * и вернуть массив, состоящий из тех дочерних элементов
+ * следующим соседом которых является элемент с тегом P
+ * Рекурсия - по желанию
+ *
+ * @param {Element} where - где искать
+ * @return {Array<Element>}
+ *
+ * @example
+ * для html '<div></div><p></p><a></a><span></span><p></p>'
+ * функция должна вернуть: [div, span]
+ * т.к. следующим соседом этих элементов является элемент с тегом P
+ */
+/*
+let mainDiv = document.createElement('div');
+div.innerHTML = '<div></div><p></p><a></a><span></span><p></p>';*/
+
+function findAllPSiblings(where) {
+}
+
+/** 5
+ * Функция должна перебрать все дочерние узлы типа "элемент" внутри where
+ * и вернуть массив, состоящий из текстового содержимого перебираемых элементов
+ * Но похоже, что в код закралась ошибка, которую нужно найти и исправить
+ *
+ * @param {Element} where - где искать
+ * @return {Array<string>}
+ */
+function findError(where) {
+    var result = [];
+
+    for (var i = 0; i < where.childNodes.length; i++) {
+        result.push(where.childNodes[i].innerText);
+    }
 
     return result;
 }
-reduce(thisArr, myFunc, 7);
 
-/*
- Задача 4:
- Функция принимает объект и имя свойства, которое необходиом удалить из объекта
- Функция должна удалить указанное свойство из указанного объекта
+/** 6
+ * Функция должна перебрать все дочерние узлы элемента where
+ * и удалить из него все текстовые узлы
+ * Без рекурсии!
+ * Будьте внимательны при удалении узлов,
+ * можно получить неожиданное поведение при переборе узлов
+ *
+ * @param {Element} where - где искать
+ *
+ * @example
+ * после выполнения функции, дерево <div></div>привет<p></p>loftchool!!!
+ * должно быть преобразовано в <div></div><p></p>
  */
-
-function deleteProperty(obj, prop) {
-    delete obj[prop];
+function deleteTextNodes(where) {
 }
 
-let dog = {
-    name: 'Jack',
-    color: 'brown',
-    woof: true
-};
-
-deleteProperty(dog, 'color');
-
-/*
- Задача 5:
- Функция принимает объект и имя свойства и возвращает true или false
- Функция должна проверить существует ли укзаанное свойство в указанном объекте
+/** 7
+ * Выполнить предудыщее задание с использование рекурсии
+ * то есть необходимо заходить внутрь каждого дочернего элемента
+ *
+ * @param {Element} where - где искать
+ *
+ * @example
+ * после выполнения функции, дерево <span> <div> <b>привет</b> </div> <p>loftchool</p> !!!</span>
+ * должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
-function hasProperty(obj, prop) {
-    if (obj.hasOwnProperty(prop)) {
-
-        return true;
-    }
-
-    return false;
+function deleteTextNodesRecursive(where) {
 }
 
-let car = {
-    model: 'Ford',
-    color: 'red',
-    type: 'sedan'
-};
-
-console.log(hasProperty(car, 'type'));
-console.log(hasProperty(car, 'wheel'));
-
-/*
- Задача 6:
- Функция должна получить все перечисляемые свойства объекта и вернуть их в виде массива
+/** 8
+ * *** Со звездочкой ***
+ * Необходимо собрать статистику по всем узлам внутри элемента root и вернуть ее в виде объекта
+ * Статистика должна содержать:
+ * - количество текстовых узлов
+ * - количество элементов каждого класса
+ * - количество элементов каждого тега
+ * Для работы с классами рекомендуется использовать свойство classList
+ * Постарайтесь не создавать глобальных переменных
+ *
+ * @param {Element} root - где собирать статистику
+ * @return {{tags: Object<string, number>, classes: Object<string, number>, texts: number}}
+ *
+ * @example
+ * для html <div class="some-class-1"><b>привет!</b> <b class="some-class-1 some-class-2">loftschool</b></div>
+ * должен быть возвращен такой объект:
+ * {
+ *   tags: { DIV: 1, B: 2},
+ *   classes: { "some-class-1": 2, "some-class-2": 1 },
+ *   texts: 3
+ * }
  */
-function getEnumProps(obj) {
-    let propsInArr = [];
-
-    for (let prop in obj) {
-        propsInArr.push(prop);
-    }
-
-    return propsInArr;
+function collectDOMStat(root) {
 }
 
-let book = {
-    name: 'Martin Eden',
-    language: 'english',
-    pages: 450,
-    interesting: true
-};
-
-getEnumProps(book);
-
-/*
- Задача 7:
- Функция должна перебрать все свойства объекта, преобразовать их имена в верхний регистра и вернуть в виде массива
+/** 9
+ * *** Со звездочкой ***
+ * Функция должна отслеживать добавление и удаление элементов внутри элемента where
+ * Как только в where добавляются или удаляются элемента,
+ * необходимо сообщать об этом при помощи вызова функции fn со специальным аргументом
+ * В качестве аргумента должен быть передан объек с двумя свойствами:
+ * - type: типа события (insert или remove)
+ * - nodes: массив из удаленных или добавленных элементов (а зависимости от события)
+ * Отслеживание должно работать вне зависимости от глубины создаваемых/удаляемых элементов
+ * Рекомендуется использовать MutationObserver
+ *
+ * @param {Element} where - где отслеживать
+ * @param {function(info: {type: string, nodes: Array<Element>})} fn - функция, которую необходимо вызвать
+ *
+ * @example
+ * если в where или в одного из его детей добавляется элемент div
+ * то fn должна быть вызвана с аргументов:
+ * {
+ *   type: 'insert',
+ *   nodes: [div]
+ * }
+ *
+ * ------
+ *
+ * если из where или из одного из его детей удаляется элемент div
+ * то fn должна быть вызвана с аргументов:
+ * {
+ *   type: 'remove',
+ *   nodes: [div]
+ * }
  */
-
-function upperProps(obj) {
-    let arr = [];
-
-    for (let key in obj) {
-        arr.push(key.toUpperCase());
-    }
-
-    return arr;
+function observeChildNodes(where, fn) {
 }
-
-let human = {
-    firstName: 'Chris',
-    lastName: 'Burn',
-    age: 27,
-    language: 'eng'
-};
-
-upperProps(human);
-
-/*
- Задача 8 *:
- Напишите аналог встроенного метода slice для работы с массивами
- */
-
-/* let arr = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-let returnedArr = [];*/
-
-// function slice(array, from, to) {}
-/*
-    function negativeFrom(par) {
-        from = (array[array.length - 1] + from);
-        console.log('-from: ', from);
-
-        return par;
-    }
-
-    function negativeTo(par) {
-        to = (array[array.length - 1] + to);
-        console.log('-to: ', to);
-
-        return par;
-    }
-
-    if (from < 0 && to < 0) {
-        negativeFrom(from);
-        negativeTo(to);
-
-        for (let i = from; i < to; i++) {
-            returnedArr.push(array[i]);
-        }
-
-        return returnedArr;
-    }
-
-    else if (from >= 0 && to < 0) {
-        negativeTo(to);
-
-        for (let i = from; i < to; i++) {
-            returnedArr.push(array[i]);
-        }
-
-        return returnedArr;}
-
-    else {
-        for (let i = from; i < to; i++) {
-            returnedArr.push(array[i]);
-        }
-
-        return returnedArr;
-    }
-}
-
-slice(arr, 1, 7);*/
-
-/*
- Задача 9 *:
- Функция принимает объект и должна вернуть Proxy для этого объекта
- Proxy должен перехватывать все попытки записи значений свойств и возводить
- это значение в квадрат
- */
-
-let sportShopPrices = {
-    sneakers: 2,
-    ball: 3,
-    trousers: 4,
-    tShirt: 5
-};
-
-function createProxy(object) {
-
-    let proxy = new Proxy(object, {
-        set(obj, prop, value) {
-
-            obj[prop] = value ** 2;
-
-            return true;
-        }
-    });
-
-    return proxy;
-}
-
-createProxy(sportShopPrices, { a: 7, b: 8 });
 
 export {
-    forEach,
-    map,
-    reduce,
-    deleteProperty,
-    hasProperty,
-    getEnumProps,
-    upperProps,
-    // slice,
-    createProxy
+    createDivWithText,
+    createAWithHref,
+    prepend,
+    findAllPSiblings,
+    findError,
+    deleteTextNodes,
+    deleteTextNodesRecursive,
+    collectDOMStat,
+    observeChildNodes
 };
