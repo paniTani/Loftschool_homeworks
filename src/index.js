@@ -20,7 +20,17 @@
  Зарпещено использовать встроенные методы для работы с массивами
  */
 
-let arr1 = [4,2,8,6,4];
+/* ///////////////////////
+ нужно выполнить переданную функцию для всех элементов массива
+ и вернуть только если для всеъ элементов массивы фукнция вернула true
+
+ [4:43]
+ если хотя бы для одного элемента вернулось false, значит надо вернуть false
+ ///////////////////
+*/
+
+
+/*let arr1 = [4,2,8,6,4];
 function isAllTrue(array, fn) {
     return function(){
       return function fn(array){
@@ -39,10 +49,10 @@ function filtering(arr) {
             console.log(true);
             counter++;
         }
-        /*else{
+        /!*else{
          throw new Error(2);
          //console.log(false);
-         }*/
+         }*!/
     }
     //console.log('Counter:' + ' '+ counter);
     //console.log('arr.length:' + ' ' + arr.length);
@@ -58,20 +68,48 @@ function filtering(arr) {
     } catch{
 
     }
-
 }
-/*try{
+/!*try{
     filtering(arr1);
+}*!/
+isAllTrue(arr1, filtering(arr1));*/
+
+
+/////////////////////////////////////////////
+/*let Array = [1, 2, 3, 4, 5];
+//let arr = [1, 2, 3, 4, 5, 'str'];
+let EMPTY_ARRAY = 'empty array';
+let NOT_A_FUNC = 'fn is not a function';
+let result;
+
+function isAllTrue(array, fn) {
+    if( typeof(fn) !== 'function') {
+        throw new Error(NOT_A_FUNC);
+    }
+
+    return fn(array);
+}
+
+function func(arr) {
+    for(let i = 0; i < arr.length; i++){
+        if(arr.length == 0 || !Array.isArray(arr)) {
+            throw new Error(EMPTY_ARRAY);
+        }
+    }
+    return true;
+}
+
+try{
+    result = isAllTrue(Array, func);
+    return result;
+} catch (e){
+
+    if(e.message == EMPTY_ARRAY || e.message == NOT_A_FUNC){
+        console.log(e.message);
+        return false;
+    }
 }*/
-isAllTrue(arr1, filtering(arr1));
-
-
-
-
-
-
-
-
+/////////////////////////////////////////////
 
 
 
@@ -101,6 +139,9 @@ if(counter == arr.length){
     console.log("False in array");
 }*/
 
+function isAllTrue(array, fn){
+
+}
 
 
 /*function isAllTrue(array, fn) {
