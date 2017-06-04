@@ -40,30 +40,12 @@ createAWithHref('http://google.com.ua');
  * @param {Element} where - куда вставлять
  */
 
-/*
-let div = document.createElement('div');
-let h1 = document.createElement('h1');
-
-div.innerHTML = '<p id="p1">Paragraph1</p><p id="p2">Paragraph2</p><p id="p3">Paragraph3</p>';
-
-*/
-
-
 function prepend(what, where) {
 
     let firstEl = where.firstChild;
 
     where.insertBefore(what, firstEl);
 }
-//prepend(h1, firstEl);
-
-
-/*function prepend(what, where) {
-    let firstChild = where.firstChild;
-
-    where.insertBefore(what, firstChild);
-}*/
-
 
 /** 4
  * Функция должна перебрать все дочерние элементы элемента where
@@ -84,6 +66,16 @@ let mainDiv = document.createElement('div');
 div.innerHTML = '<div></div><p></p><a></a><span></span><p></p>';*/
 
 function findAllPSiblings(where) {
+    let newArrSibling = [];
+    let childList = where.children;
+
+    for (let i = 0; i < childList.length - 1; i++ ) {
+        if (childList[i].nextElementSibling.tagName == 'P' ) {
+            newArrSibling.push(childList[i]);
+        }
+    }
+
+    return newArrSibling;
 }
 
 /** 5
@@ -95,10 +87,10 @@ function findAllPSiblings(where) {
  * @return {Array<string>}
  */
 function findError(where) {
-    var result = [];
+    let result = [];
 
-    for (var i = 0; i < where.childNodes.length; i++) {
-        result.push(where.childNodes[i].innerText);
+    for (let i = 0; i < where.children.length; i++) {
+        result.push(where.children[i].innerText);
     }
 
     return result;
@@ -118,6 +110,11 @@ function findError(where) {
  * должно быть преобразовано в <div></div><p></p>
  */
 function deleteTextNodes(where) {
+    for (let i = 0; i < where.childNodes.length; i++) {
+        if (where.childNodes[i].nodeType == 3) {
+            where.removeChild(where.childNodes[i]);
+        }
+    }
 }
 
 /** 7
@@ -130,7 +127,24 @@ function deleteTextNodes(where) {
  * после выполнения функции, дерево <span> <div> <b>привет</b> </div> <p>loftchool</p> !!!</span>
  * должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
+
 function deleteTextNodesRecursive(where) {
+
+    let children = where.childNodes;
+
+    for (let i = 0; i < children.length; i++) {
+
+        if (children[i].nodeType == 1) {
+
+            deleteTextNodesRecursive(children[i]);
+        }
+
+        if (children[i].nodeType == 3) {
+
+            where.removeChild(children[i]);
+            i--;
+        }
+    }
 }
 
 /** 8
@@ -155,8 +169,45 @@ function deleteTextNodesRecursive(where) {
  *   texts: 3
  * }
  */
-function collectDOMStat(root) {
-}
+/* function collectDOMStat(root) {}*/
+
+/* function collectDOMStat(root) {
+    let statistic = {};
+    let txtNode = 0;
+    let node = root.childNodes;
+    let arrClasses = [];
+    let currentClassNumber = 0;
+
+    for(let i = 0; i < node.length; i++){
+
+        if(node[i].nodeType == 3){ // for textNodes
+            txtNode++;
+        }
+
+        if(node[i].nodeType == 1){ //for elements
+
+            let currentClass = node[i].className;
+
+            for (let j = 0; j < arrClasses; j++){
+                if(arrClasses[j] == currentClass){
+
+                }
+                else{
+                    newClass[i] = currentClass;
+                    currenClassNum++;
+                }
+            }
+
+            if(arrClasses.length == 0){
+                arrClasses[0].push(currentClass);
+            }
+
+        }
+    }
+    statistic.textnodes = txtNode;
+
+    return statistic;
+}*/
 
 /** 9
  * *** Со звездочкой ***
@@ -189,8 +240,8 @@ function collectDOMStat(root) {
  *   nodes: [div]
  * }
  */
-function observeChildNodes(where, fn) {
-}
+/* function observeChildNodes(where, fn) {
+} */
 
 export {
     createDivWithText,
@@ -200,6 +251,6 @@ export {
     findError,
     deleteTextNodes,
     deleteTextNodesRecursive,
-    collectDOMStat,
-    observeChildNodes
+    // collectDOMStat,
+    // observeChildNodes
 };
