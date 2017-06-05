@@ -9,6 +9,9 @@
  * @return {Window}
  */
 function createWindow(name, width, height) {
+
+    window.open("/'" + name + "/'", "/'" + width, height + "/'");
+
 }
 
 /**
@@ -17,6 +20,9 @@ function createWindow(name, width, height) {
  * @param {Window} window - окно, размер которого надо изменить
  */
 function closeWindow(window) {
+
+    /*let newWindow = window.open('https://loftschool.com/');
+    newWindow.close();*/
 }
 
 /**
@@ -26,6 +32,7 @@ function closeWindow(window) {
  * @param value - значение
  */
 function createCookie(name, value) {
+    document.cookie = name + '=' + value;
 }
 
 /**
