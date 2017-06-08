@@ -1,3 +1,6 @@
+// import { assert } from 'chai';
+// import { loadAndSortTowns } from '../index';
+
 /**
  * ДЗ 6.2 - Создать страницу с текстовым полем для фильтрации городов
  *
@@ -36,6 +39,38 @@ let homeworkContainer = document.querySelector('#homework-container');
  * @return {Promise<Array<{name: string}>>}
  */
 function loadTowns() {
+
+    return new Promise(function(resolve, reject){
+
+        let xhr = new XMLHttpRequest();
+        let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
+
+        xhr.open('GET', url, true);
+        xhr.send();
+        xhr.addEventListener('load', function () {
+
+            if(xhr.status < 400){
+                let towns = JSON.parse(xhr.responseText);
+                let townsArr = [];
+
+                for (let i = 0; i < towns.length; i++) {
+                    townsArr.push(towns[i].name);
+                }
+
+                let sortedTowns = townsArr.sort();
+                let returnedArr = [];
+
+                for (let i = 0; i < sortedTowns.length; i++) {
+                    returnedArr.push({name:sortedTowns[i]});
+                }
+
+                resolve(returnedArr);
+            }
+            else{
+                reject();
+            }
+        })
+    });
 }
 
 /**
@@ -52,6 +87,17 @@ function loadTowns() {
  * @return {boolean}
  */
 function isMatching(full, chunk) {
+
+    let fullStr = full.toLowerCase();
+    let chunkStr = chunk.toLowerCase();
+
+    if(fullStr.indexOf(chunkStr)){
+        return fullStr;
+    }
+    else{
+        return false;
+    }
+
 }
 
 let loadingBlock = homeworkContainer.querySelector('#loading-block');
@@ -59,6 +105,23 @@ let filterBlock = homeworkContainer.querySelector('#filter-block');
 let filterInput = homeworkContainer.querySelector('#filter-input');
 let filterResult = homeworkContainer.querySelector('#filter-result');
 let townsPromise;
+
+
+
+function myFunc(arrayTowns) {
+    townsPromise = loadTowns();
+    townsPromise.then(function(){
+        homeworkContainer.appendChild(filterInput);
+
+
+    });
+
+
+
+}
+
+
+
 
 filterInput.addEventListener('keyup', function() {
 });
