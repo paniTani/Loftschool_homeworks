@@ -10,7 +10,9 @@
  */
 function createWindow(name, width, height) {
 
-    window.open("/'" + name + "/'", "/'" + width, height + "/'");
+   // window.open(`${name}`, `${width, height}`);
+
+    return window.open(name, width, height);
 
 }
 
@@ -21,8 +23,7 @@ function createWindow(name, width, height) {
  */
 function closeWindow(window) {
 
-    /*let newWindow = window.open('https://loftschool.com/');
-    newWindow.close();*/
+    return window.close();
 }
 
 /**
@@ -35,12 +36,13 @@ function createCookie(name, value) {
     document.cookie = name + '=' + value;
 }
 
-/**
+/**git
  * Функция должна удалять cookie с указанным именем
  *
  * @param name - имя
  */
 function deleteCookie(name) {
+    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
 export {
