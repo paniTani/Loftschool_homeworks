@@ -20,144 +20,57 @@
  Зарпещено использовать встроенные методы для работы с массивами
  */
 
-/* ///////////////////////
- нужно выполнить переданную функцию для всех элементов массива
- и вернуть только если для всеъ элементов массивы фукнция вернула true
-
- [4:43]
- если хотя бы для одного элемента вернулось false, значит надо вернуть false
- ///////////////////
+/* - нужно выполнить переданную функцию для всех элементов массива
+     и вернуть только если для всеъ элементов массивы фукнция вернула true;
+   - если хотя бы для одного элемента вернулось false, значит надо вернуть false
 */
 
-
-/*let arr1 = [4,2,8,6,4];
 function isAllTrue(array, fn) {
-    return function(){
-      return function fn(array){
 
-      };
-    };
-}
-
-function filtering(arr) {
-    let counter = 0;
-
-    for (let i = 0; i < arr.length; i++) {
-        console.log(arr[i]);
-
-        if (typeof(arr[i]) === 'number') {
-            console.log(true);
-            counter++;
-        }
-        /!*else{
-         throw new Error(2);
-         //console.log(false);
-         }*!/
-    }
-    //console.log('Counter:' + ' '+ counter);
-    //console.log('arr.length:' + ' ' + arr.length);
-    try {
-        if (counter == arr.length) {
-            console.log("True in array");
-            return true;
-        } else {
-            console.log("False in array");
-            throw new Error();
-            //return false;
-        }
-    } catch{
-
-    }
-}
-/!*try{
-    filtering(arr1);
-}*!/
-isAllTrue(arr1, filtering(arr1));*/
-
-
-/////////////////////////////////////////////
-/*let Array = [1, 2, 3, 4, 5];
-//let arr = [1, 2, 3, 4, 5, 'str'];
-let EMPTY_ARRAY = 'empty array';
-let NOT_A_FUNC = 'fn is not a function';
-let result;
-
-function isAllTrue(array, fn) {
-    if( typeof(fn) !== 'function') {
-        throw new Error(NOT_A_FUNC);
+    if (!Array.isArray(array) || array.length == 0) {
+        throw new Error('empty array');
     }
 
-    return fn(array);
-}
+    if (typeof(fn) !== 'function') {
+        throw new Error('fn is not a function');
+    }
 
-function func(arr) {
-    for(let i = 0; i < arr.length; i++){
-        if(arr.length == 0 || !Array.isArray(arr)) {
-            throw new Error(EMPTY_ARRAY);
+    for (let i = 0; i < array.length; i++) {
+
+        if (!fn(array[i])) {
+            return false;
         }
     }
+
     return true;
 }
 
-try{
-    result = isAllTrue(Array, func);
-    return result;
-} catch (e){
-
-    if(e.message == EMPTY_ARRAY || e.message == NOT_A_FUNC){
-        console.log(e.message);
-        return false;
-    }
-}*/
-/////////////////////////////////////////////
-
-
-
-
-
-
-
-/*var arr = [1,3,5];
-var counter = 0;
-
-for(var i = 0; i < arr.length; i++){
-    console.log(arr[i]);
-
-    if(typeof(arr[i]) === 'number'){
-        console.log(true);
-        counter++;
-    } else{
-        console.log(false);
-    }
-}
-console.log('Counter:' + ' '+ counter);
-console.log('arr.length:' + ' ' + arr.length);
-
-if(counter == arr.length){
-    console.log("True in array")
-}else{
-    console.log("False in array");
-}*/
-
-function isAllTrue(array, fn){
-
-}
-
-
-/*function isAllTrue(array, fn) {
-}*/
-
-
-/*
- Задача 2:
+/* Задача 2:
  Функция принимает массив и фильтрующую фукнцию и должна вернуть true или false
  Функция должна вернуть true если fn вернула true хотя бы для одного из элементов массива
  Необходимо выбрасывать исключение в случаях:
- - array не массив или пустой массив (с текстом "empty array")
- - fn не является функцией (с текстом "fn is not a function")
- Зарпещено использовать встроенные методы для работы с массивами
- */
+ - array не массив или пустой массив (с текстом "empty array");
+ - fn не является функцией (с текстом "fn is not a function");
+ Зарпещено использовать встроенные методы для работы с массивами */
 function isSomeTrue(array, fn) {
+
+    if (!Array.isArray(array) || array.length == 0) {
+        throw new Error('empty array');
+    }
+
+    if (typeof(fn) !== 'function') {
+        throw new Error('fn is not a function');
+    }
+
+    for (let i = 0; i < array.length; i++) {
+
+        if (fn(array[i])) {
+
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /*
@@ -168,7 +81,24 @@ function isSomeTrue(array, fn) {
  Необходимо выбрасывать исключение в случаях:
  - fn не является функцией (с текстом "fn is not a function")
  */
-function returnBadArguments(fn) {
+function returnBadArguments(fn, ...args) {
+
+    if (typeof(fn) !== 'function') {
+        throw new Error('fn is not a function');
+    }
+
+    let argsArr = [];
+
+    for (let i = 0; i < args.length; i++) {
+
+        try {
+            fn(args[i]);
+        } catch (e) {
+            argsArr.push(args[i]);
+        }
+    }
+
+    return argsArr;
 }
 
 /*
@@ -185,7 +115,54 @@ function returnBadArguments(fn) {
  - number не является числом (с текстом "number is not a number")
  - какой-либо из аргументов div является нулем (с текстом "division by 0")
  */
-function calculator() {
+function calculator(number=0, ...args) {
+    if (typeof(number) !== 'number') {
+        throw new Error('number is not a number');
+    }
+
+    let obj = {
+        sum: function(...args) {
+            let result = number;
+
+            for (let i = 0; i < args.length; i++) {
+                result += args[i];
+            }
+
+            return result;
+        },
+        dif: function (...args) {
+            let result = number;
+
+            for (let i = 0; i < args.length; i++) {
+                result -= args[i];
+            }
+
+            return result;
+        },
+        div: function(...args) {
+            let result = number;
+
+            for (let i = 0; i < args.length; i++) {
+                if (args[i] == 0) {
+                    throw new Error('division by 0');
+                }
+                result = result/args[i];
+            }
+
+            return result;
+        },
+        mul: function (...args) {
+            let result = number;
+
+            for (let i = 0; i < args.length; i++) {
+                result *= args[i];
+            }
+
+            return result;
+        }
+    };
+
+    return obj;
 }
 
 export {
