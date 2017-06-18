@@ -23,9 +23,9 @@ function delayPromise(seconds) {
  *
  * @return {Promise<Array<{name: String}>>}
  */
-function loadAndSortTowns(){
+function loadAndSortTowns() {
 
-    return new Promise(function(resolve, reject){
+    return new Promise(function(resolve, reject) {
 
         let xhr = new XMLHttpRequest();
         let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
@@ -45,10 +45,15 @@ function loadAndSortTowns(){
             let returnedArr = [];
 
             for (let i = 0; i < sortedTowns.length; i++) {
-                returnedArr.push({name:sortedTowns[i]});
+                returnedArr.push( {name:sortedTowns[i]} );
             }
 
-            resolve(returnedArr);
+            if(xhr.status < 400){
+                resolve(returnedArr);
+            }
+            else{
+
+            }
         })
     });
 }

@@ -40,37 +40,7 @@ let homeworkContainer = document.querySelector('#homework-container');
  */
 function loadTowns() {
 
-    return new Promise(function(resolve, reject){
-
-        let xhr = new XMLHttpRequest();
-        let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
-
-        xhr.open('GET', url, true);
-        xhr.send();
-        xhr.addEventListener('load', function () {
-
-            if(xhr.status < 400){
-                let towns = JSON.parse(xhr.responseText);
-                let townsArr = [];
-
-                for (let i = 0; i < towns.length; i++) {
-                    townsArr.push(towns[i].name);
-                }
-
-                let sortedTowns = townsArr.sort();
-                let returnedArr = [];
-
-                for (let i = 0; i < sortedTowns.length; i++) {
-                    returnedArr.push({name:sortedTowns[i]});
-                }
-
-                resolve(returnedArr);
-            }
-            else{
-                reject();
-            }
-        })
-    });
+    return require('./index.js').loadAndSortTowns();
 }
 
 /**
@@ -87,43 +57,69 @@ function loadTowns() {
  * @return {boolean}
  */
 function isMatching(full, chunk) {
-
     let fullStr = full.toLowerCase();
     let chunkStr = chunk.toLowerCase();
 
-    if(fullStr.indexOf(chunkStr)){
-        return fullStr;
-    }
-    else{
-        return false;
+    if (fullStr.indexOf(chunkStr) !== -1) {
+
+        return true;
     }
 
+    return false;
 }
 
 let loadingBlock = homeworkContainer.querySelector('#loading-block');
-let filterBlock = homeworkContainer.querySelector('#filter-block');
+// let filterBlock = homeworkContainer.querySelector('#filter-block');
 let filterInput = homeworkContainer.querySelector('#filter-input');
 let filterResult = homeworkContainer.querySelector('#filter-result');
 let townsPromise;
 
-
-
-function myFunc(arrayTowns) {
+function myFunc() {
     townsPromise = loadTowns();
-    townsPromise.then(function(){
-        homeworkContainer.appendChild(filterInput);
+    townsPromise.then(function(townsList) {
 
+            loadingBlock.innerHTML = '';
+            filterResult.innerHTML = '';
+            homeworkContainer.appendChild(filterInput);
+            homeworkContainer.appendChild(filterResult);
 
-    });
+            for (let i = 0; i < townsList.length; i++) {
+                if (filterInput.value !== '') {
+                    if (isMatching(townsList[i].name, filterInput.value)) {
+                        let newTown = document.createElement('div');
 
+                        newTown.innerText = townsList[i].name;
+                        filterResult.appendChild(newTown);
+                    }
+                }
+            }
+        },
+        function () {
 
+            console.log('файл не удалось загрузить');
+            loadingBlock.innerHTML = '';
+            filterResult.innerHTML = '';
+            homeworkContainer.appendChild(filterResult);
 
+            let div = document.createElement('div');
+            let buttonRepeat = document.createElement('button');
+
+            div.innerText = 'Не удалось загрузить города';
+            buttonRepeat.innerText = 'Повторить';
+            filterResult.appendChild(div);
+            filterResult.appendChild(buttonRepeat);
+
+            buttonRepeat.addEventListener('click', function () {
+                return myFunc();
+            });
+
+        });
 }
 
-
-
-
 filterInput.addEventListener('keyup', function() {
+
+    myFunc();
+
 });
 
 export {
