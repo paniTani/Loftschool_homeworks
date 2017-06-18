@@ -10,9 +10,7 @@
  */
 function createWindow(name, width, height) {
 
-   // window.open(`${name}`, `${width, height}`);
-
-    return window.open(name, width, height);
+   return window.open(name, width, height);
 
 }
 
