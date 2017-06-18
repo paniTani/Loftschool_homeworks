@@ -69,7 +69,7 @@ function isMatching(full, chunk) {
 }
 
 let loadingBlock = homeworkContainer.querySelector('#loading-block');
-// let filterBlock = homeworkContainer.querySelector('#filter-block');
+let filterBlock = homeworkContainer.querySelector('#filter-block');
 let filterInput = homeworkContainer.querySelector('#filter-input');
 let filterResult = homeworkContainer.querySelector('#filter-result');
 let townsPromise;
@@ -98,16 +98,15 @@ function myFunc() {
 
             console.log('файл не удалось загрузить');
             loadingBlock.innerHTML = '';
-            filterResult.innerHTML = '';
-            homeworkContainer.appendChild(filterResult);
+            filterBlock.innerHTML = '';
 
             let div = document.createElement('div');
             let buttonRepeat = document.createElement('button');
 
             div.innerText = 'Не удалось загрузить города';
             buttonRepeat.innerText = 'Повторить';
-            filterResult.appendChild(div);
-            filterResult.appendChild(buttonRepeat);
+            filterBlock.appendChild(div);
+            filterBlock.appendChild(buttonRepeat);
 
             buttonRepeat.addEventListener('click', function () {
                 return myFunc();

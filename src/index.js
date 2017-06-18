@@ -28,7 +28,7 @@ function loadAndSortTowns() {
     return new Promise(function(resolve, reject) {
 
         let xhr = new XMLHttpRequest();
-        let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
+        let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.jsonsss';
 
         xhr.open('GET', url, true);
         xhr.send();
