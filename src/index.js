@@ -28,7 +28,7 @@ function loadAndSortTowns() {
     return new Promise(function(resolve, reject) {
 
         let xhr = new XMLHttpRequest();
-        let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.jsonsss';
+        let url = 'https://raw.githubusercontent.com/smelukov/citiesTest/master/cities.json';
 
         xhr.open('GET', url, true);
         xhr.send();
@@ -52,7 +52,7 @@ function loadAndSortTowns() {
                 resolve(returnedArr);
             }
             else{
-
+                reject();
             }
         })
     });

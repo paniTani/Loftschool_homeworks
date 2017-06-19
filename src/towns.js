@@ -74,51 +74,56 @@ let filterInput = homeworkContainer.querySelector('#filter-input');
 let filterResult = homeworkContainer.querySelector('#filter-result');
 let townsPromise;
 
-function myFunc() {
-    townsPromise = loadTowns();
-    townsPromise.then(function(townsList) {
+townsPromise = loadTowns();
+loadingBlock.innerHTML = '';
+filterResult.innerHTML = '';
+homeworkContainer.appendChild(filterInput);
+homeworkContainer.appendChild(filterResult);
 
-            loadingBlock.innerHTML = '';
+townsPromise.then(
+    function(townsList) {
+        filterInput.addEventListener('keyup', function() {
+
             filterResult.innerHTML = '';
-            homeworkContainer.appendChild(filterInput);
-            homeworkContainer.appendChild(filterResult);
 
-            for (let i = 0; i < townsList.length; i++) {
-                if (filterInput.value !== '') {
-                    if (isMatching(townsList[i].name, filterInput.value)) {
+            for (let i = 0; i < townsList.length; i++){
+                if(filterInput.value !== ''){
+                    if(isMatching(townsList[i].name, filterInput.value)){
                         let newTown = document.createElement('div');
 
                         newTown.innerText = townsList[i].name;
                         filterResult.appendChild(newTown);
                     }
                 }
+                else{
+                    filterResult.innerText = '';
+                }
             }
-        },
-        function () {
-
-            console.log('файл не удалось загрузить');
-            loadingBlock.innerHTML = '';
-            filterBlock.innerHTML = '';
-
-            let div = document.createElement('div');
-            let buttonRepeat = document.createElement('button');
-
-            div.innerText = 'Не удалось загрузить города';
-            buttonRepeat.innerText = 'Повторить';
-            filterBlock.appendChild(div);
-            filterBlock.appendChild(buttonRepeat);
-
-            buttonRepeat.addEventListener('click', function () {
-                return myFunc();
-            });
-
         });
-}
+    }/*,
+    function () {
+        // loadingBlock.innerHTML = '';
+        // filterInput.innerHTML = '';
+        filterResult.innerHTML = "";
+        filterBlock.innerHTML = "";
 
-filterInput.addEventListener('keyup', function() {
+        console.log('ошибочка вышла');
 
-    myFunc();
+        let div = document.createElement('div');
+        let buttonRepeat = document.createElement('button');
 
+        div.innerText = 'Не удалось загрузить города';
+        buttonRepeat.innerText = 'Повторить';
+        filterBlock.appendChild(div);
+        filterBlock.appendChild(buttonRepeat);
+
+        buttonRepeat.addEventListener('click', function () {
+            return townsPromise();
+        });
+    }*/
+)
+.catch(function (e) {
+    console.log('catch error', e);
 });
 
 export {
