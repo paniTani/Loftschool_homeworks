@@ -120,8 +120,8 @@ addButton.addEventListener('click', () => {
             }
         }*/
         createCookie(cookieName, cookieValue);
-        addNameInput.value = ' ';
-        addValueInput.value = ' ';
+        addNameInput.value = '';
+        addValueInput.value = '';
 
         deleteButton.addEventListener('click', function () {
 
