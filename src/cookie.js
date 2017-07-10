@@ -40,25 +40,32 @@ let addButton = homeworkContainer.querySelector('#add-button');
 let listTable = homeworkContainer.querySelector('#list-table tbody');
 
 // let cookiesArray = [];
-let cookieObj = {};
+let cookieObj = getCookies();
 let cookieFilteringObj = {};
 
+function getCookies() {
+    return document.cookie
+        .split('; ')
+        .filter(Boolean)
+        .map(cookie => cookie.match(/^([^=]+)=(.+)/))
+        .reduce((obj, [, name, value]) => {
+            obj[name] = value;
+
+            return obj;
+        }, {});
+}
+
 function isMatching(full, chunk) {
-    let fullStr = full.toLowerCase();
-    let chunkStr = chunk.toLowerCase();
+    if (~full.toUpperCase().indexOf(chunk.toUpperCase())) {
+                return true;
+            }
 
-    if (fullStr.indexOf(chunkStr) !== -1) {
-
-        return true;
-    }
-
-    return false;
+            return false;
 }
 
 function createCookie(name, value){
     document.cookie = name + '=' + value + ';expires=Thu, 31 Dec 2019 12:00:00 UTC';
     // cookiesArray.push(name);
-    cookieObj[name] = value;
 }
 
 function deleteCookie(name) {
@@ -71,41 +78,27 @@ function fillTable(cookieName, cookieValue) {
         let cellName = document.createElement('TD');
         let cellValue = document.createElement('TD');
         let cellDelete = document.createElement('TD');
-        let deleteButton = document.createElement('INPUT');
+        let deleteButton = document.createElement('button');
+        deleteButton.innerHTML = 'Удалить';
+        row.appendChild(cellName);
+        row.appendChild(cellValue);
+        row.appendChild(cellDelete);
+        listTable.appendChild(row);
+        row.setAttribute('id', cookieName);
+                //deleteButton.setAttribute('type', 'submit');
+        deleteButton.setAttribute('name', cookieName);
+                //deleteButton.setAttribute('value', 'Delete');
+        cellName.innerText = cookieName;
+        cellValue.innerText = cookieValue;
+        cellDelete.appendChild(deleteButton);
+            
+        
 
-        for (let key in cookieObj){
-            if (key == cookieName) {
-                let changedRow = document.getElementById(cookieName);
-                let arrTd = changedRow.getElementsByTagName('TD');
+        //addNameInput.value = '';
+        //addValueInput.value = '';
 
-                changedRow.remove();
-                arrTd[1].innerText = cookieObj[key];
-
-                // clear inputs
-                addNameInput.value = ' ';
-                addValueInput.value = ' ';
-            }
-            else {
-                row.appendChild(cellName);
-                row.appendChild(cellValue);
-                row.appendChild(cellDelete);
-                listTable.appendChild(row);
-                row.setAttribute('id', cookieName);
-                deleteButton.setAttribute('type', 'submit');
-                deleteButton.setAttribute('name', cookieName);
-                deleteButton.setAttribute('value', 'Delete');
-                cellName.innerText = cookieName;
-                cellValue.innerText = cookieValue;
-                cellDelete.appendChild(deleteButton);
-            }
-        }
-
-        createCookie(cookieName, cookieValue);
-        addNameInput.value = '';
-        addValueInput.value = '';
-
-        deleteButton.addEventListener('click', function () {
-            let nameForDelete = this.getAttribute('name');
+        deleteButton.addEventListener('click', function (e) {
+            let nameForDelete = e.target.getAttribute('name');
             let deleteTr = document.getElementById(nameForDelete);
 
             deleteCookie(nameForDelete);
@@ -114,46 +107,52 @@ function fillTable(cookieName, cookieValue) {
 }
 
 function clearTable() {
-    let trArrayForRemoving = listTable.getElementsByTagName('TR');
-
-    for (let i = 0; i < trArrayForRemoving.length; i++) {
-
-        trArrayForRemoving[i].remove();
+    for (let i = 0; i < listTable.childNodes.length; i++) {
+        listTable.childNodes[i].remove();
+        i--;
     }
 }
 
 addButton.addEventListener('click', () => {
+    clearTable();
     let cookieName = addNameInput.value;
     let cookieValue = addValueInput.value;
-
-    if (cookieName && cookieValue){
-        fillTable(cookieName, cookieValue);
+    createCookie(cookieName, cookieValue);
+    let cookieObj = getCookies();
+    for (let key in cookieObj){
+        if (filterNameInput.value) {
+            if (isMatching(key, filterNameInput.value)) {
+                fillTable(key, cookieObj[key]); 
+            }
+        } else {
+            fillTable(key, cookieObj[key]); 
+        }
     }
 });
 
 filterNameInput.addEventListener('keyup', function() {
-
+        clearTable();
+        let cookieObj = getCookies();
         // если в поле для фильтрации есть значение
         if (filterNameInput.value !== '') {
-            // for (let i = 0; i < cookiesArray.length; i++) {
             for (let key in cookieObj) {
-                // console.log('key', key);
-                if (isMatching(key, filterNameInput.value)) {
-                    let shownTr = document.getElementById(key);
-                    console.log('shownTr: ', shownTr);
-                    cookieFilteringObj[key] = cookieObj[key];
-                    // clearTable();
-                    fillTable(key, cookieFilteringObj[key]);
+                if (isMatching(key, filterNameInput.value) || isMatching(cookieObj[key], filterNameInput.value)) {
+                    fillTable(key, cookieObj[key]); 
                 }
-
-                cookieFilteringObj = {}; //очищем объект после каждого ввода в инпут
             }
         }
         // если поле для фильтрации пустое
         else if (filterNameInput.value == ''){
-            for (let key in cookieObj) {
-                fillTable(key, cookieObj[key]);
-            }
-            console.log('cookieObj', cookieObj);
+            let cookieObj = getCookies();
+            for (let key in cookieObj){
+               fillTable(key, cookieObj[key]); 
+           }
         }
 });
+window.onload = () => {
+    clearTable();
+    let cookieObj = getCookies();
+    for (let key in cookieObj){
+       fillTable(key, cookieObj[key]); 
+   }
+}
