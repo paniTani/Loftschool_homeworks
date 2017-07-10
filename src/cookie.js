@@ -39,8 +39,9 @@ let addValueInput = homeworkContainer.querySelector('#add-value-input');
 let addButton = homeworkContainer.querySelector('#add-button');
 let listTable = homeworkContainer.querySelector('#list-table tbody');
 
-let cookiesArray = [];
-
+// let cookiesArray = [];
+let cookieObj = {};
+let cookieFilteringObj = {};
 
 function isMatching(full, chunk) {
     let fullStr = full.toLowerCase();
@@ -49,54 +50,46 @@ function isMatching(full, chunk) {
     if (fullStr.indexOf(chunkStr) !== -1) {
 
         return true;
-    } /*else{
+    }
 
-        return false;
-    }*/
     return false;
 }
 
 function createCookie(name, value){
     document.cookie = name + '=' + value + ';expires=Thu, 31 Dec 2019 12:00:00 UTC';
-    cookiesArray.push(name);
+    // cookiesArray.push(name);
+    cookieObj[name] = value;
 }
 
 function deleteCookie(name) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
-addButton.addEventListener('click', () => {
-
-    let cookieName = addNameInput.value;
-    let cookieValue = addValueInput.value;
-
-
-    if (cookieName && cookieValue) {
-
+function fillTable(cookieName, cookieValue) {
+    // if (cookieName && cookieValue) {
         let row = document.createElement('TR');
         let cellName = document.createElement('TD');
         let cellValue = document.createElement('TD');
         let cellDelete = document.createElement('TD');
         let deleteButton = document.createElement('INPUT');
 
-        for (let i = 0; i < cookiesArray.length; i++) {
-            if (cookiesArray[i] == cookieName) {
-
+        for (let key in cookieObj){
+            if (key == cookieName) {
                 let changedRow = document.getElementById(cookieName);
                 let arrTd = changedRow.getElementsByTagName('TD');
 
-                arrTd[1].innerText = cookieValue;
+                changedRow.remove();
+                arrTd[1].innerText = cookieObj[key];
+
                 // clear inputs
                 addNameInput.value = ' ';
                 addValueInput.value = ' ';
-
             }
             else {
                 row.appendChild(cellName);
                 row.appendChild(cellValue);
                 row.appendChild(cellDelete);
                 listTable.appendChild(row);
-
                 row.setAttribute('id', cookieName);
                 deleteButton.setAttribute('type', 'submit');
                 deleteButton.setAttribute('name', cookieName);
@@ -104,10 +97,6 @@ addButton.addEventListener('click', () => {
                 cellName.innerText = cookieName;
                 cellValue.innerText = cookieValue;
                 cellDelete.appendChild(deleteButton);
-                // createCookie(cookieName, cookieValue);
-                // cookiesArray.push(cookieName);
-                // console.log(cookiesArray);
-
             }
         }
 
@@ -116,47 +105,55 @@ addButton.addEventListener('click', () => {
         addValueInput.value = '';
 
         deleteButton.addEventListener('click', function () {
-
             let nameForDelete = this.getAttribute('name');
             let deleteTr = document.getElementById(nameForDelete);
 
             deleteCookie(nameForDelete);
-            // console.log('deleteTr', deleteTr);
             deleteTr.remove();
         });
+}
+
+function clearTable() {
+    let trArrayForRemoving = listTable.getElementsByTagName('TR');
+
+    for (let i = 0; i < trArrayForRemoving.length; i++) {
+
+        trArrayForRemoving[i].remove();
+    }
+}
+
+addButton.addEventListener('click', () => {
+    let cookieName = addNameInput.value;
+    let cookieValue = addValueInput.value;
+
+    if (cookieName && cookieValue){
+        fillTable(cookieName, cookieValue);
     }
 });
 
 filterNameInput.addEventListener('keyup', function() {
 
-    for (let i = 0; i < cookiesArray.length; i++) {
+        // если в поле для фильтрации есть значение
         if (filterNameInput.value !== '') {
-            if (isMatching(cookiesArray[i], filterNameInput.value)){
-               // let sameTmp = document.getElementBy;
+            // for (let i = 0; i < cookiesArray.length; i++) {
+            for (let key in cookieObj) {
+                // console.log('key', key);
+                if (isMatching(key, filterNameInput.value)) {
+                    let shownTr = document.getElementById(key);
+                    console.log('shownTr: ', shownTr);
+                    cookieFilteringObj[key] = cookieObj[key];
+                    // clearTable();
+                    fillTable(key, cookieFilteringObj[key]);
+                }
+
+                cookieFilteringObj = {}; //очищем объект после каждого ввода в инпут
             }
         }
-    }
-
-
-
-    // console.log(cookiesArray);
-    // console.log(filterNameInput.value);
-
-
-    // filterNameInput.innerHTML = '';
-
-    /* for (let i = 0; i < townsList.length; i++){
-     if(filterNameInput.value !== ''){
-     if(isMatching(townsList[i].name, filterInput.value)){
-     let newTown = document.createElement('div');
-
-     newTown.innerText = townsList[i].name;
-     filterResult.appendChild(newTown);
-     }
-     }
-     else{
-     filterResult.innerText = '';
-     }
-     }*/
-
+        // если поле для фильтрации пустое
+        else if (filterNameInput.value == ''){
+            for (let key in cookieObj) {
+                fillTable(key, cookieObj[key]);
+            }
+            console.log('cookieObj', cookieObj);
+        }
 });
